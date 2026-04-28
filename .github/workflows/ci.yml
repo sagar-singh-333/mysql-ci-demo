@@ -2,7 +2,8 @@ name: Java + MySQL CI
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
@@ -11,17 +12,23 @@ jobs:
     services:
       mysql:
         image: mysql:8
-        ports:
-          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: testdb
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Wait for MySQL
-        run: sleep 25
+        run: sleep 30
 
       - name: Set up Java
         uses: actions/setup-java@v3
