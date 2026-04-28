@@ -37,3 +37,4 @@ jobs:
 
       - name: Build and Test
         run: mvn clean test
+        working-directory: mysql-ci-demo
